@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post">
+    <h1>Blogposts</h1>
+</form>
+
+{% for blogpost in blogposts %}
+    <ul class="blogpost">
+        <li><a href="{{blogpost.title}}" class="blogpost-title" value="{{blogpost.key().id()}}">{{blogpost.title}}</a></li>
+        <pre class="blogpost-body" value="{{blogpost.key().id()}}">{{blogpost.blogpost}}</pre>
+        <hr>
+    </ul>
+{% endfor %}
+
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if blogpost %}
+<form method="get">
+    <div class="error">{{error}}</div>
+    <div class="blogpost">
+        <div class="blogpost-title">{{blogpost.title}}</div>
+        <pre class="blogpost-body">{{blogpost.blogpost}}</pre>
+    </div>
+</form>
+{% endif %}
+
+{% endblock %}
