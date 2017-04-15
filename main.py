@@ -69,10 +69,12 @@ class BlogPost(db.Model):
 
 class Blog(Handler):
 
-    def render_blog(self, title="",blogpost="", error=""):
+    def render_blog(self, title="",blogpost="", error="", page=""):
         blogposts = db.GqlQuery("SELECT * FROM BlogPost "
                                 "ORDER BY created DESC "
-                                "LIMIT 5")
+                                "LIMIT 5 ")
+
+
 
         self.render("main.html", title=title, blogpost=blogpost, error=error, blogposts=blogposts)
 
@@ -80,26 +82,34 @@ class Blog(Handler):
         self.render_blog()
 
 
+
 class ViewPostHandler(Handler):
 
     def get(self, id):
 
         blogpost = BlogPost.get_by_id(int(id))
-        self.render("single.html", blogpost=blogpost)
+        if blogpost:
+            self.render("single.html", blogpost=blogpost)
+        else:
+            error = "ID does not exist"
+            self.response.write(error)
+
 
 
 def get_posts(limit, offset):
-    posts = db.GqlQuery("SELECT * FROM BlogPost "
-                        "ORDER BY created DESC "
-                        "LIMIT  OFFSET ")
 
-    self.render("main.html", title=title, blogpost=blogpost, error=error, posts=posts)
+    posts = db.GqlQuery("SELECT * FROM BlogPost ORDER BY created DESC LIMIT {0} OFFSET {1}".format(limit, offset))
+
+    return posts
 
 
 class MainPage(Handler):
 
     def get(self):
-        self.render("newpost.html")
+
+        t = jinja_env.get_template("main.html")
+        content = t.render()
+        self.response.write(content)
 
 
 app = webapp2.WSGIApplication([
